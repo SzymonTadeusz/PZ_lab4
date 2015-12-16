@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.org/hibernate-mapping-3.0.dtd">
+<!-- Generated 2015-12-07 15:00:03 by Hibernate Tools 3.5.0.Final -->
+<hibernate-mapping>
+    <class name="edu.pl.wcy.wat.isi.pz.lab4_SM.A" table="A">
+        <id name="A_ID" type="int">
+            <column name="A_ID" />
+            <generator class="assigned" />
+        </id>
+        <property name="A_char" type="char">
+            <column name="A_CHAR" />
+        </property>
+        <property name="A_double" type="double">
+            <column name="A_DOUBLE" />
+        </property>
+        <property name="A_String" type="java.lang.String">
+            <column name="A_STRING" />
+        </property>
+        <set name="zbiorB" table="B" inverse="false" lazy="true" access="field">
+            <key>
+                <column name="A_ID" />
+            </key>
+            <one-to-many class="edu.pl.wcy.wat.isi.pz.lab4_SM.B" />
+        </set>
+    </class>
+</hibernate-mapping>

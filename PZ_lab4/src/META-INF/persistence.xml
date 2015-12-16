@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+	<persistence-unit name="PZ_lab4">
+		<provider>org.hibernate.ejb.HibernatePersistence</provider>
+		<class>edu.pl.wcy.wat.isi.pz.lab4_SM.A</class>
+		<class>edu.pl.wcy.wat.isi.pz.lab4_SM.B</class>
+		<class>edu.pl.wcy.wat.isi.pz.lab4_SM.C</class>
+		
+	 <properties>
+         <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/PZ_lab4"/>
+         <property name="javax.persistence.jdbc.user" value="root"/>
+         <property name="javax.persistence.jdbc.password" value="qaz123"/>
+         <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+         <property name="eclipselink.logging.level" value="FINE"/>
+         <property name="eclipselink.ddl-generation" value="create-tables"/>
+         <property name="hibernate.hbm2ddl.auto" value="create"/>
+      </properties>
+		
+	</persistence-unit>
+</persistence>
