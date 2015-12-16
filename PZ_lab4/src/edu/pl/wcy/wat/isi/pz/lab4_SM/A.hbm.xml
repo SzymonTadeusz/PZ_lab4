@@ -6,7 +6,7 @@
     <class name="edu.pl.wcy.wat.isi.pz.lab4_SM.A" table="A">
         <id name="A_ID" type="int">
             <column name="A_ID" />
-            <generator class="assigned" />
+            <generator class="increment" />
         </id>
         <property name="A_char" type="char">
             <column name="A_CHAR" />

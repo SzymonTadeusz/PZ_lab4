@@ -33,6 +33,15 @@ public class C implements Serializable{
 		return this.zbiorB;
 	}
 	
+	public C(){}
+	
+	public C(char c, double d, String s, B b) {
+		this.C_char=c;
+		this.C_double=d;
+		this.C_String=s;
+		this.dodajDoZbioru(b);
+		b.dodajDoZbioru(this);
+	}
 	
 	public int getC_ID() {
 		return C_ID;

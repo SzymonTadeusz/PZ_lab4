@@ -6,13 +6,13 @@
     <class name="edu.pl.wcy.wat.isi.pz.lab4_SM.B" table="B">
         <id name="B_ID" type="int">
             <column name="B_ID" />
-            <generator class="assigned" />
+            <generator class="increment" />
         </id>
         <property name="B_char" type="char">
             <column name="B_CHAR" />
         </property>
         <many-to-one name="a" class="edu.pl.wcy.wat.isi.pz.lab4_SM.A" unique="true" access="field" fetch="join" cascade="all">
-            <column name="a_id" />
+            <column name="A_ID" />
         </many-to-one>
  
         <property name="B_double" type="double">

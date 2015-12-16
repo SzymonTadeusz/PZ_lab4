@@ -6,7 +6,7 @@
     <class name="edu.pl.wcy.wat.isi.pz.lab4_SM.C" table="C">
         <id name="C_ID" type="int">
             <column name="C_ID" />
-            <generator class="assigned" />
+            <generator class="increment" />
         </id>
         <property name="C_char" type="char">
             <column name="C_CHAR" />
@@ -17,7 +17,7 @@
         <property name="C_String" type="java.lang.String">
             <column name="C_STRING" />
         </property>
-        <set name="zbiorB" table="B" inverse="false" lazy="true" access="field">
+        <set name="zbiorB" table="B" inverse="false" lazy="true" access="field" cascade="all">
             <key>
                 <column name="C_ID" />
             </key>
