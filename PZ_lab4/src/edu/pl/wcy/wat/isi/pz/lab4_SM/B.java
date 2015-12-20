@@ -41,6 +41,17 @@ public class B implements Serializable{
 	
 	public B(){}
 
+	@Override
+	public String toString()
+	{
+		return ("Klasa=B, ID="+this.B_ID+", String="+this.B_String+", char="+this.B_char+", double="+this.B_double);
+	}
+	
+	
+	public A getA() {
+		return this.a;
+	}
+	
 	public void setA(A _a) {
 		this.a = _a;
 	}

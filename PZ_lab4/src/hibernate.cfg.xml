@@ -10,8 +10,8 @@
         <property name="connection.username">root</property>
         <property name="hibernate.default_schema">PZ_lab4</property>
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
-          <mapping resource="A.hbm.xml" />
-          <mapping resource="B.hbm.xml" />
-          <mapping resource="C.hbm.xml" />
+          <mapping resource="edu/pl/wcy/wat/isi/pz/lab4_SM/A.hbm.xml" />
+          <mapping resource="edu/pl/wcy/wat/isi/pz/lab4_SM/B.hbm.xml" />
+          <mapping resource="edu/pl/wcy/wat/isi/pz/lab4_SM/C.hbm.xml" />
     </session-factory>
 </hibernate-configuration>

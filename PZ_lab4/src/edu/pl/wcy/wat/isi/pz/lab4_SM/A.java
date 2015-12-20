@@ -6,13 +6,14 @@ import java.util.Set;
 
 import javax.persistence.*;
 
+
 @Entity
 @Table(name="A")
 public class A implements Serializable{
 	private static final long serialVersionUID = 1L;
     
     private static EntityManager entitymanager;
-    private static EntityManagerFactory emfactory;
+    static EntityManagerFactory emfactory;
 	
 
 	@Id
@@ -25,7 +26,6 @@ public class A implements Serializable{
 	@Column
 	private String A_String;
 	
-	//@OneToMany(mappedBy="a.zbiorb")
 	@Column
 	protected Set<B> zbiorB = new HashSet<B>(); 
 	
@@ -36,27 +36,12 @@ public class A implements Serializable{
 		this.A_double=d;
 		this.A_String=s;
 	}
-	public static void main(String[] args) {
-		getEntityMgr().getTransaction().begin();
-		A a1 = new A('a',1.25,"a1");
-		B b1 = new B('b',0.25,"b1",a1);
-		C c1 = new C('c',1.15,"c1",b1);
-		C c2 = new C('c',1.15,"c2",b1);
-		A a2 = new A('a',1.25,"a2");
-		B b2 = new B('b',0.25,"b2",a2);
-		C c3 = new C('c',1.15,"c3",b2);
-		C c4 = new C('c',1.15,"c4",b2);
-		//Ponizsze zapytanie powinno zwrocic powiazane ze soba elementy
-		//select * from A join b on A.A_ID=b.A_ID join C on b.B_Id=c.B_ID
-
-		getEntityMgr().persist(b1);
-		getEntityMgr().persist(b2);
-		b1.setB_char('x');
-		getEntityMgr().getTransaction().commit();
-		//A a1 = getEntityMgr().find(A.class, 0);
-		//System.out.println(a1.getA_ID() + a1.getA_String());
-		getEntityMgr().close();
-	      emfactory.close();
+	
+	
+	@Override
+	public String toString()
+	{
+		return ("Klasa=A, ID="+this.A_ID+", String="+this.A_String+", char="+this.A_char+", double="+this.A_double);
 	}
 
 	public static EntityManager getEntityMgr()

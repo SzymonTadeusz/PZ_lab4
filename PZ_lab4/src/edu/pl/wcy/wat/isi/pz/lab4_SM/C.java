@@ -43,6 +43,12 @@ public class C implements Serializable{
 		b.dodajDoZbioru(this);
 	}
 	
+	@Override
+	public String toString()
+	{
+		return ("Klasa=C, ID="+this.C_ID+", String="+this.C_String+", char="+this.C_char+", double="+this.C_double);
+	}
+	
 	public int getC_ID() {
 		return C_ID;
 	}
