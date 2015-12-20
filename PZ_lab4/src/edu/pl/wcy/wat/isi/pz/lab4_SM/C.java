@@ -4,29 +4,22 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.*;
 
-@Entity
 public class C implements Serializable{
 	private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int C_ID;
-	@Column
 	private char C_char;
-	@Column
 	private double C_double;
-	@Column
 	private String C_String;
 	
-	//@ManyToMany(mappedBy="C.zbiorB")
-	@Column
+
 	protected Set<B> zbiorB = new HashSet<B>(); 
 	
 	public void dodajDoZbioru(B nowy)
 	{
 		zbiorB.add(nowy);
+		if(!nowy.getZbiorC().contains(this))nowy.dodajDoZbioru(this); //unikamy rekurencyjnego wywo³ania
 	}
 	public Set<B> getZbiorB()
 	{
@@ -40,7 +33,7 @@ public class C implements Serializable{
 		this.C_double=d;
 		this.C_String=s;
 		this.dodajDoZbioru(b);
-		b.dodajDoZbioru(this);
+		if(b!=null)	b.dodajDoZbioru(this);
 	}
 	
 	@Override

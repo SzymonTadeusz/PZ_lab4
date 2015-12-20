@@ -7,8 +7,6 @@ import java.util.Set;
 import javax.persistence.*;
 
 
-@Entity
-@Table(name="A")
 public class A implements Serializable{
 	private static final long serialVersionUID = 1L;
     
@@ -16,17 +14,11 @@ public class A implements Serializable{
     static EntityManagerFactory emfactory;
 	
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int A_ID;
-	@Column
 	private char A_char;
-	@Column
 	private double A_double;
-	@Column
 	private String A_String;
 	
-	@Column
 	protected Set<B> zbiorB = new HashSet<B>(); 
 	
 	public A(){}

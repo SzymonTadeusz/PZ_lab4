@@ -3,43 +3,35 @@ package edu.pl.wcy.wat.isi.pz.lab4_SM;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-
-import javax.persistence.*;
-
-@Entity
 public class B implements Serializable{
 	private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int B_ID;
-	@Column
 	private char B_char;
-	@ManyToOne
-	@Column
 	private A a;
-	@Column
 	private double B_double;
-	@Column
 	private String B_String;
 	
-	//@ManyToMany(mappedBy="B.zbiorC")
-	@Column
+
 	protected Set<C> zbiorC = new HashSet<C>();
 	
 	public void dodajDoZbioru(C nowy)
 	{
 		zbiorC.add(nowy);
+		if(!nowy.getZbiorB().contains(this))nowy.dodajDoZbioru(this); //unikamy rekurencyjnego wywo³ania
 	}
 	public B(char c, double d, String s, A a) {
 		this.B_char=c;
 		this.B_double=d;
 		this.B_String=s;
 		this.setA(a);
-		a.dodajDoZbioru(this);
+		if(a!=null)	a.dodajDoZbioru(this);
+		Main.addB(this);
 	}
 	
-	public B(){}
+	public B(){
+	//	Main.addB(this);
+	}
 
 	@Override
 	public String toString()

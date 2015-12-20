@@ -21,11 +21,11 @@
         <property name="B_String" type="java.lang.String">
             <column name="B_STRING" />
         </property>
-        <set name="zbiorC" table="C" inverse="false" lazy="true" access="field" cascade="all">
+        <set name="zbiorC" table="BC" inverse="false" lazy="true" access="field" cascade="all">
             <key>
                 <column name="B_ID" />
             </key>
-            <one-to-many class="edu.pl.wcy.wat.isi.pz.lab4_SM.C" />
+            <many-to-many class="edu.pl.wcy.wat.isi.pz.lab4_SM.C" column="C_ID" fetch="join" />
         </set>
     </class>
 </hibernate-mapping>
