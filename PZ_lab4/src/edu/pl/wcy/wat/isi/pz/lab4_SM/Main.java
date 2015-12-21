@@ -1,22 +1,31 @@
 package edu.pl.wcy.wat.isi.pz.lab4_SM;
 
 import java.awt.BorderLayout;
+import java.awt.GridLayout;
+import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-
 import org.hibernate.HibernateException;
+import org.hibernate.Query;
 import org.hibernate.Session;
 
 public class Main {
@@ -28,6 +37,9 @@ public class Main {
 	static DefaultListModel<B> modelB = new DefaultListModel<>();
     static DefaultListModel<C> modelC = new DefaultListModel<>();
     private static List<B> listaB = new ArrayList<>();
+    private static Session session;
+    
+    static int wyswietlany;
 
 	
 	@SuppressWarnings({ "unchecked", "unused" })
@@ -39,7 +51,169 @@ public class Main {
         modelBPanel.setSize(334,300);
         JLabel labelB = new JLabel ("Trwa uruchamianie Hibernate'a i ≥adowanie danych...");
         modelBPanel.add(labelB,BorderLayout.NORTH);
+        
+        JPanel buttonPanelB = new JPanel(new GridLayout());
+        JButton buttonAddB = new JButton();
+        ImageIcon iconAdd = new ImageIcon("resources/add.jpg");
+        Image img = iconAdd.getImage();
+        Image newimg = img.getScaledInstance(50, 50,  java.awt.Image.SCALE_SMOOTH);
+        buttonAddB.setIcon(new ImageIcon(newimg));
+        buttonAddB.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseReleased(MouseEvent e) {}
+			@Override
+			public void mousePressed(MouseEvent e) {}
+			@Override
+			public void mouseExited(MouseEvent e) {}
+			@Override
+			public void mouseEntered(MouseEvent e) {}
+			@Override
+			public void mouseClicked(MouseEvent e) {
+        		JPanel panel = new JPanel(new GridLayout());
+        		JLabel l_char = new JLabel("Char: ", JLabel.TRAILING);
+        		panel.add(l_char);
+        		JTextField textFieldChar = new JTextField(10);
+        		l_char.setLabelFor(textFieldChar);
+        		panel.add(textFieldChar);
+        		
+    		    JLabel l_double = new JLabel("Double: ", JLabel.TRAILING);
+    		    panel.add(l_double);
+    		    JTextField textFieldDouble = new JTextField(10);
+    		    l_char.setLabelFor(textFieldDouble);
+    		    panel.add(textFieldDouble);
 
+    		    JLabel l_string = new JLabel("String: ", JLabel.TRAILING);
+    		    panel.add(l_string);
+    		    JTextField textFieldString = new JTextField(10);
+    		    l_char.setLabelFor(textFieldString);
+    		    panel.add(textFieldString);   
+            	
+    		    JFrame addWindow = new JFrame("Dodaj nowy element typu B");
+        		JButton bt = new JButton("Zatwierdü");
+        		bt.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						char b_char = textFieldChar.getText().charAt(0);
+						double b_double;
+						try{
+						b_double = Double.parseDouble(textFieldDouble.getText());
+						}catch(NumberFormatException ex){b_double=0;}
+						String b_string = textFieldString.getText();
+						A.getEntityMgr().getTransaction().begin();
+						B b = new B(b_char,b_double,b_string,null);		
+						modelB.addElement(b);
+						listaB.add(b);
+						A.getEntityMgr().persist(b);
+						A.getEntityMgr().getTransaction().commit();
+						addWindow.dispose();
+					}
+				});
+        		
+        		panel.add(bt,BorderLayout.AFTER_LAST_LINE);
+        		addWindow.getContentPane().add(panel);
+        		addWindow.pack();
+        		addWindow.setVisible(true);
+        		}
+			});
+        buttonAddB.setSize(50,50);
+        buttonPanelB.add(buttonAddB);
+        
+        JButton buttonRemoveB = new JButton();
+        iconAdd = new ImageIcon("resources/remove.jpg");
+        img = iconAdd.getImage();
+        newimg = img.getScaledInstance(50, 50,  java.awt.Image.SCALE_SMOOTH);
+        buttonRemoveB.setIcon(new ImageIcon(newimg));
+        buttonRemoveB.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseReleased(MouseEvent e) {}
+			@Override
+			public void mousePressed(MouseEvent e) {}
+			@Override
+			public void mouseExited(MouseEvent e) {}
+			@Override
+			public void mouseEntered(MouseEvent e) {}
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				A.getEntityMgr().getTransaction().begin();
+				int id = modelB.getElementAt(Main.wyswietlany).getB_ID();
+				System.out.println("Usuwam "+modelB.getElementAt(Main.wyswietlany)+" "+id);
+				Query q = session.createQuery("delete from B where B_ID = " + id);
+				q.executeUpdate();
+				modelB.removeElementAt(Main.wyswietlany);
+				listaB.remove(wyswietlany);
+	    		A.getEntityMgr().getTransaction().commit();
+				}
+			});
+        buttonRemoveB.setSize(50, 50);
+        buttonPanelB.add(buttonRemoveB);
+        
+        JButton buttonEditB = new JButton();
+        iconAdd = new ImageIcon("resources/edit.jpg");
+        img = iconAdd.getImage();
+        newimg = img.getScaledInstance(50, 50,  java.awt.Image.SCALE_SMOOTH);
+        buttonEditB.setIcon(new ImageIcon(newimg));
+        buttonEditB.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseReleased(MouseEvent e) {}
+			@Override
+			public void mousePressed(MouseEvent e) {}
+			@Override
+			public void mouseExited(MouseEvent e) {}
+			@Override
+			public void mouseEntered(MouseEvent e) {}
+			@Override
+			public void mouseClicked(MouseEvent e) {
+        		JPanel panel = new JPanel(new GridLayout());
+        		JLabel l_char = new JLabel("Char: ", JLabel.TRAILING);
+        		panel.add(l_char);
+        		JTextField textFieldChar = new JTextField(10);
+        		l_char.setLabelFor(textFieldChar);
+        		panel.add(textFieldChar);
+        		
+    		    JLabel l_double = new JLabel("Double: ", JLabel.TRAILING);
+    		    panel.add(l_double);
+    		    JTextField textFieldDouble = new JTextField(10);
+    		    l_char.setLabelFor(textFieldDouble);
+    		    panel.add(textFieldDouble);
+
+    		    JLabel l_string = new JLabel("String: ", JLabel.TRAILING);
+    		    panel.add(l_string);
+    		    JTextField textFieldString = new JTextField(10);
+    		    l_char.setLabelFor(textFieldString);
+    		    panel.add(textFieldString);   
+            	
+    		    JFrame addWindow = new JFrame("Zmodyfikuj element typu B");
+        		JButton bt = new JButton("Zatwierdü");
+        		bt.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						char b_char = textFieldChar.getText().charAt(0);
+						double b_double;
+						try{
+						b_double = Double.parseDouble(textFieldDouble.getText());
+						}catch(NumberFormatException ex){b_double=0;}
+						String b_string = textFieldString.getText();
+						
+						A.getEntityMgr().getTransaction().begin();
+						int id = modelB.getElementAt(Main.wyswietlany).getB_ID();
+						Query q = session.createQuery("update B	set b_char="+b_char+ ", b_double="+b_double+ ", b_string="+b_string	+" where b_id =" + id);
+						q.executeUpdate();
+			    		A.getEntityMgr().getTransaction().commit();
+						addWindow.dispose();
+					}
+				});
+        		
+        		panel.add(bt,BorderLayout.AFTER_LAST_LINE);
+        		addWindow.getContentPane().add(panel);
+        		addWindow.pack();
+        		addWindow.setVisible(true);
+        		}
+			});
+        buttonEditB.setSize(50, 50);
+        buttonPanelB.add(buttonEditB);
+        
+        
+        modelBPanel.add(buttonPanelB,BorderLayout.SOUTH);
         JPanel modelAPanel = new JPanel(new BorderLayout());
         modelAPanel.setSize(333,300);
         JLabel labelA = new JLabel ("Zaznacz element z klasy B");
@@ -49,7 +223,7 @@ public class Main {
         modelCPanel.setSize(333,300);
         JLabel labelC = new JLabel ("Zaznacz element z klasy B");
         modelCPanel.add(labelC,BorderLayout.NORTH);
-
+        
         windowPanel.add(modelBPanel,BorderLayout.WEST);
 
         Main.getWindow().setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -90,11 +264,12 @@ public class Main {
         		C c3 = new C('c',1.15,"c3",b2);
         		C c4 = new C('c',1.15,"c4",b2);
         		B b3 = new B('b',0.25,"b3",null);
+        		B b4 = new B('b',0.25,"b3",a2);
         		C c5 = new C('c',1.15,"c5",b1);
         		c5.dodajDoZbioru(b2);
         		
         		A.getEntityMgr().getTransaction().begin();
-        		Session session = A.getEntityMgr().unwrap(Session.class);
+        		session = A.getEntityMgr().unwrap(Session.class);
         		
         		//Ponizsze zapytanie powinno zwrocic powiazane ze soba elementy
         		//select * from A join b on A.A_ID=b.A_ID join C on b.B_Id=c.B_ID
@@ -119,6 +294,38 @@ public class Main {
         };
         watekHibernate.run();
         
+        Thread watekUpdate = new Thread()
+        	{
+    		@Override
+    		public void run() 
+        	{
+	    		while(true)
+	    		{
+	    			try {
+						Thread.sleep(5000);
+					} catch (InterruptedException e) {}
+	    			
+	    	
+	    			try{
+	    			List<B> dane = session.createCriteria(B.class).list();
+	    			modelB.removeAllElements();
+	    			for(B _b : dane)
+	    			{
+	    				modelB.addElement(_b);
+	    			}
+	    			labelB.setText("Obiekty typu B:");
+	    		}catch (HibernateException e1){
+	    			System.out.println("Blad Hibernate'a!");
+	    			}
+	    		catch (NullPointerException e1){
+	    			System.out.println("Brak rekordu o podanym ID!");
+					}
+	    	
+	    		}
+        	}
+        };
+        //watekUpdate.run();
+        
         
         listaObiektowB = new JList<>(modelB);
         listaObiektowB.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -131,6 +338,7 @@ public class Main {
         	@Override
 			public void valueChanged(ListSelectionEvent event) {
 				listaObiektowB.clearSelection();
+				wyswietlany=event.getFirstIndex();
 				labelA.setText("Obiekt A dla B o ID="+modelB.get(event.getFirstIndex()).getB_ID()+":");
 				modelA.removeAllElements();
 				modelA.addElement(modelB.get(event.getFirstIndex()).getA());
