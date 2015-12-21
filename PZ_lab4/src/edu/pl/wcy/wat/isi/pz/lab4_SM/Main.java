@@ -27,6 +27,9 @@ import javax.swing.event.ListSelectionListener;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.exception.SQLGrammarException;
+
+import com.mysql.jdbc.exceptions.MySQLSyntaxErrorException;
 
 public class Main {
 	private static JFrame oknoProgramu;
@@ -167,18 +170,21 @@ public class Main {
         		JLabel l_char = new JLabel("Char: ", JLabel.TRAILING);
         		panel.add(l_char);
         		JTextField textFieldChar = new JTextField(10);
+        		textFieldChar.setText(modelB.getElementAt(wyswietlany).getB_char()+"");
         		l_char.setLabelFor(textFieldChar);
         		panel.add(textFieldChar);
         		
     		    JLabel l_double = new JLabel("Double: ", JLabel.TRAILING);
     		    panel.add(l_double);
     		    JTextField textFieldDouble = new JTextField(10);
+    		    textFieldDouble.setText(modelB.getElementAt(wyswietlany).getB_double()+"");
     		    l_char.setLabelFor(textFieldDouble);
     		    panel.add(textFieldDouble);
 
     		    JLabel l_string = new JLabel("String: ", JLabel.TRAILING);
     		    panel.add(l_string);
     		    JTextField textFieldString = new JTextField(10);
+    		    textFieldString.setText(modelB.getElementAt(wyswietlany).getB_String()+"");
     		    l_char.setLabelFor(textFieldString);
     		    panel.add(textFieldString);   
             	
@@ -196,8 +202,11 @@ public class Main {
 						
 						A.getEntityMgr().getTransaction().begin();
 						int id = modelB.getElementAt(Main.wyswietlany).getB_ID();
-						Query q = session.createQuery("update B	set b_char="+b_char+ ", b_double="+b_double+ ", b_string="+b_string	+" where b_id =" + id);
-						q.executeUpdate();
+						System.out.println("Zmieniam obiekt o ID="+id +"(char="+b_char+" double="+b_double+" string="+b_string+")");
+						Query q = session.createQuery("update B	set b_char= '"+b_char+ "', b_double= "+b_double+ ", b_string= '"+b_string	+"' where b_id =" + id);
+						try{
+							q.executeUpdate();
+						}catch(SQLGrammarException e1){System.out.println("B³¹d! Nie wykonano aktualizacji.");}
 			    		A.getEntityMgr().getTransaction().commit();
 						addWindow.dispose();
 					}
@@ -211,6 +220,46 @@ public class Main {
 			});
         buttonEditB.setSize(50, 50);
         buttonPanelB.add(buttonEditB);
+        
+        JButton buttonRefresh = new JButton();
+        iconAdd = new ImageIcon("resources/refresh.jpg");
+        img = iconAdd.getImage();
+        newimg = img.getScaledInstance(50, 50,  java.awt.Image.SCALE_SMOOTH);
+        buttonRefresh.setIcon(new ImageIcon(newimg));
+        buttonRefresh.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseReleased(MouseEvent e) {}
+			@Override
+			public void mousePressed(MouseEvent e) {}
+			@Override
+			public void mouseExited(MouseEvent e) {}
+			@Override
+			public void mouseEntered(MouseEvent e) {}
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				try{
+	        		A.getEntityMgr().getTransaction().begin();
+        			List<B> dane = session.createCriteria(B.class).list();
+        			modelB.removeAllElements();
+        			listaB.clear();
+        			for(B _b : dane)
+        			{
+        				modelB.addElement(_b);
+        				listaB.add(_b);
+        			}
+        			labelB.setText("Obiekty typu B:");
+        		}catch (HibernateException e1){
+        			System.out.println("Blad Hibernate'a!");
+        			}
+        		catch (NullPointerException e1){
+        			System.out.println("Brak rekordu o podanym ID!");
+					}
+        		A.getEntityMgr().getTransaction().commit();
+    		    
+        		}
+			});
+        buttonRefresh.setSize(50, 50);
+        buttonPanelB.add(buttonRefresh);
         
         
         modelBPanel.add(buttonPanelB,BorderLayout.SOUTH);
