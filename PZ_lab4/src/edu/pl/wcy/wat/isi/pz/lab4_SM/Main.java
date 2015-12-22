@@ -676,6 +676,77 @@ public class Main {
         buttonLinkA.setSize(50, 50);
         buttonPanelA.add(buttonLinkA);
 
+        JButton buttonUnlinkA = new JButton();
+        ImageIcon iconUnlink = new ImageIcon("resources/unlink.jpg");
+        Image imgUnlink = iconUnlink.getImage();
+        Image newimgUnlink = imgUnlink.getScaledInstance(50, 50,  java.awt.Image.SCALE_SMOOTH);
+        buttonUnlinkA.setIcon(new ImageIcon(newimgUnlink));
+        buttonUnlinkA.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseReleased(MouseEvent e) {}
+			@Override
+			public void mousePressed(MouseEvent e) {}
+			@Override
+			public void mouseExited(MouseEvent e) {}
+			@Override
+			public void mouseEntered(MouseEvent e) {}
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				JFrame removeWindow = new JFrame("Usuñ powi¹zanie A - B");
+        		JPanel panel = new JPanel(new GridLayout());
+				
+        		JLabel l_aid = new JLabel("A_ID: ", JLabel.TRAILING);
+        		panel.add(l_aid);
+        		JTextField textFieldAID = new JTextField();
+        		l_aid.setLabelFor(textFieldAID);
+        		panel.add(textFieldAID);
+
+        		JLabel l_bid = new JLabel("B_ID: ", JLabel.TRAILING);
+        		panel.add(l_bid);
+        		JTextField textFieldBID = new JTextField();
+        		l_bid.setLabelFor(textFieldBID);
+        		panel.add(textFieldBID);
+				
+        		
+        		JButton bt = new JButton("ZatwierdŸ");
+        		bt.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						int idA, idB;
+						A.getEntityMgr().getTransaction().begin();
+						try{
+							idB = Integer.parseInt(textFieldBID.getText());
+							idA = Integer.parseInt(textFieldAID.getText());
+							
+							System.out.println("Usuwam powi¹zanie miêdzy elementami: B_ID="+idB+", A_ID="+idA+".");
+							Query q = session.createSQLQuery("update B set A_id=null where B_ID="+idB);
+						
+								try{
+									q.executeUpdate();
+								}catch(SQLGrammarException e1){System.out.println("B³¹d! Nie wykonano aktualizacji.");}
+								 catch(ConstraintViolationException e2){System.out.println("B³¹d! Nie istnieje B/C o podanym ID lub jest u¿ywane.");}
+							}catch(NumberFormatException ex){
+								System.out.println("B³¹d! Niewlasciwy format liczby.");
+								}
+						B tmp = null;
+						try{	
+							for (B _b : listaB) session.refresh(_b);
+							for (C _c : listaC) session.refresh(_c);
+						}catch(UnresolvableObjectException e1){System.out.println("Nast¹pi³ b³¹d podczas dodawania po³¹czenia");}
+						A.getEntityMgr().getTransaction().commit();
+						removeWindow.dispose();
+					}
+				});
+        		
+        		panel.add(bt,BorderLayout.AFTER_LAST_LINE);
+        		removeWindow.getContentPane().add(panel);
+        		removeWindow.pack();
+        		removeWindow.setVisible(true);
+				}
+			});
+        buttonUnlinkA.setSize(50, 50);
+        buttonPanelA.add(buttonUnlinkA);
+        
         modelAPanel.add(buttonPanelA,BorderLayout.SOUTH);
         
         //*************************************************************
@@ -978,12 +1049,79 @@ public class Main {
 			});
         buttonLinkC.setSize(50, 50);
         buttonPanelC.add(buttonLinkC);
+
+        JButton buttonUnlinkC = new JButton();
+        buttonUnlinkC.setIcon(new ImageIcon(newimgUnlink));
+        buttonUnlinkC.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseReleased(MouseEvent e) {}
+			@Override
+			public void mousePressed(MouseEvent e) {}
+			@Override
+			public void mouseExited(MouseEvent e) {}
+			@Override
+			public void mouseEntered(MouseEvent e) {}
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				JFrame removeWindow = new JFrame("Usuñ powi¹zanie B - C");
+        		JPanel panel = new JPanel(new GridLayout());
+				
+				JLabel l_bid = new JLabel("B_ID: ", JLabel.TRAILING);
+        		panel.add(l_bid);
+        		JTextField textFieldBID = new JTextField();
+        		l_bid.setLabelFor(textFieldBID);
+        		panel.add(textFieldBID);
+				
+        		JLabel l_cid = new JLabel("C_ID: ", JLabel.TRAILING);
+        		panel.add(l_cid);
+        		JTextField textFieldCID = new JTextField();
+        		l_cid.setLabelFor(textFieldCID);
+        		panel.add(textFieldCID);
+        		
+        		JButton bt = new JButton("ZatwierdŸ");
+        		bt.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						int idC, idB;
+						A.getEntityMgr().getTransaction().begin();
+						try{
+							idB = Integer.parseInt(textFieldBID.getText());
+							idC = Integer.parseInt(textFieldCID.getText());
+							
+							System.out.println("Usuwam powi¹zanie miêdzy elementami: B_ID="+idB+", C_ID="+idC+".");
+							Query q = session.createSQLQuery("delete from BC where B_ID="+idB+ " AND C_ID= " + idC);
+						
+								try{
+									q.executeUpdate();
+								}catch(SQLGrammarException e1){System.out.println("B³¹d! Nie wykonano aktualizacji.");}
+								 catch(ConstraintViolationException e2){System.out.println("B³¹d! Nie istnieje B/C o podanym ID lub jest u¿ywane.");}
+							}catch(NumberFormatException ex){
+								System.out.println("B³¹d! Niewlasciwy format liczby.");
+								}
+						B tmp = null;
+						try{	
+							for (B _b : listaB) session.refresh(_b);
+							for (C _c : listaC) session.refresh(_c);
+						}catch(UnresolvableObjectException e1){System.out.println("Nast¹pi³ b³¹d podczas dodawania po³¹czenia");}
+						A.getEntityMgr().getTransaction().commit();
+						removeWindow.dispose();
+					}
+				});
+        		
+        		panel.add(bt,BorderLayout.AFTER_LAST_LINE);
+        		removeWindow.getContentPane().add(panel);
+        		removeWindow.pack();
+        		removeWindow.setVisible(true);
+				}
+			});
+        buttonUnlinkC.setSize(50, 50);
+        buttonPanelC.add(buttonUnlinkC);
         
         
         modelCPanel.add(buttonPanelC,BorderLayout.SOUTH);
         
-        windowPanel.add(modelBPanel);
         windowPanel.add(modelAPanel);
+        windowPanel.add(modelBPanel);
         windowPanel.add(modelCPanel);
         
         
