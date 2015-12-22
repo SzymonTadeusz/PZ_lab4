@@ -17,7 +17,7 @@
         <property name="A_String" type="java.lang.String">
             <column name="A_STRING" />
         </property>
-        <set name="zbiorB" table="B" inverse="false" lazy="true" access="field">
+        <set name="zbiorB" table="B" inverse="false" lazy="true" access="field" cascade="all">
             <key>
                 <column name="A_ID" />
             </key>

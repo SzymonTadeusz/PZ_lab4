@@ -19,7 +19,7 @@ public class C implements Serializable{
 	public void dodajDoZbioru(B nowy)
 	{
 		zbiorB.add(nowy);
-		if(!nowy.getZbiorC().contains(this))nowy.dodajDoZbioru(this); //unikamy rekurencyjnego wywo³ania
+		if(nowy!=null && !nowy.getZbiorC().contains(this))nowy.dodajDoZbioru(this); //unikamy rekurencyjnego wywo³ania
 	}
 	public Set<B> getZbiorB()
 	{
